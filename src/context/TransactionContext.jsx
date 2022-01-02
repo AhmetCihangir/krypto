@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 
 import { contractABI,contractAddress } from '../utils/constant'
+import { shortenAddress } from '../utils/shortenAddress';
 
 export const TransactionContext = createContext();
 
@@ -44,7 +45,6 @@ export const TransactionProvider = ({ children }) => {
 
             setTransactions(structuredTransactions)
 
-            console.log(structuredTransactions);
         } catch (error) {
             console.log(error)
             throw new Error("No eth object")
@@ -124,10 +124,10 @@ export const TransactionProvider = ({ children }) => {
 
             const transactionHash = await transactionContract.addToBlockchain(addressTo, parsedAmount, message, keyword )
             setIsLoading(true)
-            console.log(`Loading - ${transactionHash.hash}`);
+            console.log(`Loading - ${shortenAddress(transactionHash.hash)}`);
             await transactionHash.wait()
             setIsLoading(false)
-            console.log(`Success - ${transactionHash.hash}`);
+            console.log(`Success - ${shortenAddress(transactionHash.hash)}`);
 
             const transactionCount = await transactionContract.getTransactionCount()
 
